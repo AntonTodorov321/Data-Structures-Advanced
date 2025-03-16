@@ -94,7 +94,6 @@
                     current.RightKey = node.LeftKey;
                     current.MiddleChild = node.LeftChild;
                     current.RightChild = node.MiddleChild;
-
                 }
                 else
                 {
