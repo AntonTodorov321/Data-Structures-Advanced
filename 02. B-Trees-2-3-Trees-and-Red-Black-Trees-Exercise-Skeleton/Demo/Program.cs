@@ -16,9 +16,9 @@ namespace Demo
             rbt.Insert(16);
             rbt.Insert(15);
 
-            rbt.DeleteMin();
-            rbt.DeleteMax();
-            rbt.DeleteMax();
+            rbt.Delete(12);
+            rbt.Delete(7);
+            rbt.Delete(3);
         }
     }
 }
