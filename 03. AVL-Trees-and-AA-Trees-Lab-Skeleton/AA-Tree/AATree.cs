@@ -29,7 +29,7 @@ namespace AA_Tree
 
         public void Insert(T element)
         {
-            throw new NotImplementedException();
+            this.root = this.Insert(this.root, element);
         }
 
         public bool Contains(T element)
@@ -77,7 +77,7 @@ namespace AA_Tree
                 return 0;
             }
 
-            return 1 + this.Count(node.Right) + this.Count(node.Right);
+            return 1 + this.Count(node.Right) + this.Count(node.Left);
         }
 
         private void InOrder(Node node, Action<T> action)
@@ -116,6 +116,72 @@ namespace AA_Tree
             this.PostOrder(node.Left, action);
             this.PostOrder(node.Right, action);
             action(node.Value);
+        }
+
+        private Node Insert(Node node, T element)
+        {
+            if (node == null)
+            {
+                return new Node(element);
+            }
+
+            if (element.CompareTo(node.Value) < 0)
+            {
+                node.Left = this.Insert(node.Left, element);
+            }
+            else
+            {
+                node.Right = this.Insert(node.Right, element);
+            }
+
+            node = this.Skew(node);
+            node = this.Split(node);
+
+            return node;
+        }
+
+        private Node Split(Node node)
+        {
+            if (node.Right == null || node.Right.Right == null)
+            {
+                return node;
+            }
+            else if (node.Right.Right.Level == node.Level)
+            {
+                node = this.RotateRight(node);
+                node.Level++;
+            }
+
+            return node;
+        }
+
+        private Node RotateRight(Node node)
+        {
+            Node temp = node.Right;
+            node.Right = temp.Left;
+            temp.Left = node;
+
+            return temp;
+        }
+
+        private Node Skew(Node node)
+        {
+            if (node.Left != null && node.Level == node.Left.Level)
+            {
+                node = this.RotateLeft(node);
+            }
+
+            return node;
+        }
+
+        private Node RotateLeft(Node node)
+        {
+            Node temp = node.Left;
+            node.Left = temp.Right;
+            temp.Right = node;
+
+            return temp;
+
         }
     }
 }
