@@ -9,6 +9,7 @@
             public Node(T value)
             {
                 this.Value = value;
+                this.Height = 1;
             }
 
             public T Value { get; set; }
@@ -21,7 +22,7 @@
 
         public bool Contains(T element)
         {
-            throw new InvalidOperationException();
+            return this.Contains(this.Root, element) != null;
         }
 
         public void Delete(T element)
@@ -41,7 +42,50 @@
 
         public void EachInOrder(Action<T> action)
         {
-            throw new InvalidOperationException();
+            this.EachInOrder(this.Root, action);
+        }
+
+        private void EachInOrder(Node node, Action<T> action)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            this.EachInOrder(node.Left, action);
+            action(node.Value);
+            this.EachInOrder(node.Right, action);
+        }
+
+        private Node Contains(Node node, T element)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            int compare = node.Value.CompareTo(element);
+
+            if (compare > 0)
+            {
+                return this.Contains(node.Left, element);
+            }
+            else if (compare < 0)
+            {
+                return this.Contains(node.Right, element);
+            }
+
+            return node;
+        }
+
+        private int Height(Node node)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+
+            return node.Height;
         }
     }
 }
