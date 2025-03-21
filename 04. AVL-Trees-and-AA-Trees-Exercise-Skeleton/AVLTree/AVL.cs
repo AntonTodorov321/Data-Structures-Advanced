@@ -1,6 +1,7 @@
 ﻿namespace AVLTree
 {
     using System;
+    using System.Text.RegularExpressions;
 
     public class AVL<T> where T : IComparable<T>
     {
@@ -37,7 +38,80 @@
 
         public void Insert(T element)
         {
-            throw new InvalidOperationException();
+            this.Root = this.Insert(this.Root, element);
+        }
+
+        private Node Insert(Node node, T element)
+        {
+            if (node == null)
+            {
+                return new Node(element);
+            }
+
+            if (element.CompareTo(node.Value) < 0)
+            {
+                node.Left = this.Insert(node.Left, element);
+            }
+            else
+            {
+                node.Right = this.Insert(node.Right, element);
+            }
+
+            node = this.Balance(node);
+            node.Height = Math.Max(this.Height(node.Left), this.Height(node.Right)) + 1;
+
+            return node;
+        }
+
+        private Node Balance(Node node)
+        {
+            int balanceFactor = this.Height(node.Left) - this.Height(node.Right);
+
+            if (balanceFactor > 1)
+            {
+                int childBalanceFactor = this.Height(node.Left.Left) - this.Height(node.Left.Right);
+                if (childBalanceFactor < 0)
+                {
+                    node.Left = this.RotateLeft(node.Left);
+
+                }
+
+                node = this.RotateRight(node);
+            }
+            else if (balanceFactor < -1)
+            {
+                int childBalanceFactor =
+                    this.Height(node.Right.Left) - this.Height(node.Right.Right);
+                if (childBalanceFactor > 0)
+                {
+                    node.Right = this.RotateRight(node.Right);
+                }
+
+                node = this.RotateLeft(node);
+            }
+
+            return node;
+
+        }
+
+        private Node RotateRight(Node node)
+        {
+            Node temp = node.Left;
+            node.Left = temp.Right;
+            temp.Right = node;
+
+            node.Height = Math.Max(this.Height(node.Left), this.Height(node.Right)) + 1;
+            return temp;
+        }
+
+        private Node RotateLeft(Node node)
+        {
+            Node temp = node.Right;
+            node.Right = temp.Left;
+            temp.Left = node;
+
+            node.Height = Math.Max(this.Height(node.Left), this.Height(node.Right)) + 1;
+            return temp;
         }
 
         public void EachInOrder(Action<T> action)
