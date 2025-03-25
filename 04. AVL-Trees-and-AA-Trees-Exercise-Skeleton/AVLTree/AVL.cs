@@ -1,7 +1,6 @@
 ﻿namespace AVLTree
 {
     using System;
-    using System.Text.RegularExpressions;
 
     public class AVL<T> where T : IComparable<T>
     {
@@ -38,7 +37,14 @@
 
         public void DeleteMin()
         {
-            throw new InvalidOperationException();
+            if (this.Root == null)
+            {
+                return;
+            }
+
+            Node smallestNode = this.FindSmallestChild(this.Root);
+
+            this.Root = this.Delete(this.Root, smallestNode.Value);
         }
 
         public void Insert(T element)
