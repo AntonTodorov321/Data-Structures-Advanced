@@ -17,6 +17,11 @@
             public Node Left { get; set; }
             public Node Right { get; set; }
             public int Height { get; set; }
+
+            public override string ToString()
+            {
+                return $"Value:[{Value}] Height:{this.Height}";
+            }
         }
 
         public Node Root { get; private set; }
@@ -28,7 +33,7 @@
 
         public void Delete(T element)
         {
-            throw new InvalidOperationException();
+            this.Root = this.Delete(this.Root, element);
         }
 
         public void DeleteMin()
@@ -160,6 +165,60 @@
             }
 
             return node.Height;
+        }
+
+        private Node Delete(Node node, T element)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.Value.CompareTo(element) > 0)
+            {
+                node.Left = this.Delete(node.Left, element);
+            }
+            else if (node.Value.CompareTo(element) < 0)
+            {
+                node.Right = this.Delete(node.Right, element);
+            }
+            else
+            {
+                if (node.Left == null && node.Right == null)
+                {
+                    return null;
+                }
+                else if (node.Left == null)
+                {
+                    node = node.Right;
+                }
+                else if (node.Right == null)
+                {
+                    node = node.Left;
+                }
+                else
+                {
+                    Node temp = this.FindSmallestChild(node.Right);
+                    node.Value = temp.Value;
+
+                    node.Right = this.Delete(node.Right, temp.Value);
+                }
+            }
+
+            node = this.Balance(node);
+            node.Height = Math.Max(this.Height(node.Left), this.Height(node.Right)) + 1;
+
+            return node;
+        }
+
+        private Node FindSmallestChild(Node node)
+        {
+            if (node.Left == null)
+            {
+                return node;
+            }
+
+            return this.FindSmallestChild(node.Left);
         }
     }
 }
