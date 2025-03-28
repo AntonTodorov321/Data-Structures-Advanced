@@ -84,7 +84,6 @@
                 if (childBalanceFactor < 0)
                 {
                     node.Left = this.RotateLeft(node.Left);
-
                 }
 
                 node = this.RotateRight(node);
@@ -102,7 +101,6 @@
             }
 
             return node;
-
         }
 
         private Node RotateRight(Node node)
