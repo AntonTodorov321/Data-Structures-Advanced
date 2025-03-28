@@ -1,6 +1,7 @@
 ﻿namespace HashTable
 {
     using System;
+
     public class KeyValue<TKey, TValue>
     {
         public TKey Key { get; set; }
