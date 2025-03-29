@@ -1,6 +1,7 @@
 ﻿namespace HashTable
 {
     using System;
+    using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -47,7 +48,8 @@
             {
                 if (element.Key.Equals(key))
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException("Duplicate Key", key.ToString());
+                    //throw new DuplicateKeyException("Duplicate Key", key.ToString());
                 }
             }
 
@@ -58,7 +60,23 @@
 
         public bool AddOrReplace(TKey key, TValue value)
         {
-            throw new NotImplementedException();
+            try
+            {
+                this.Add(key, value);
+            }
+            catch (ArgumentException argumentException)
+            {
+                if (argumentException.Message.Contains("Duplicate Key")
+                    && argumentException.ParamName == key.ToString())
+                {
+                    int index = Math.Abs(key.GetHashCode()) % this.Capacity;
+                    var keyValue = this.slots[index].FirstOrDefault(kvp => kvp.Key.Equals(key));
+                    keyValue.Value = value;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public TValue Get(TKey key)
@@ -70,11 +88,24 @@
         {
             get
             {
-                throw new NotImplementedException();
+                int index = Math.Abs(key.GetHashCode()) % this.Capacity;
+
+                if (this.slots[index] != null)
+                {
+                    foreach (var element in this.slots[index])
+                    {
+                        if (element.Key.Equals(key))
+                        {
+                            return element.Value;
+                        }
+                    }
+                }
+
+                throw new KeyNotFoundException();
             }
             set
             {
-                throw new NotImplementedException();
+                this.AddOrReplace(key, value);
             }
         }
 
@@ -112,13 +143,26 @@
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TKey> Keys => throw new NotImplementedException();
+        public IEnumerable<TKey> Keys => this.Select(kvp => kvp.Key);
 
         public IEnumerable<TValue> Values
         {
             get
             {
-                throw new NotImplementedException();
+                var values = new List<TValue>();
+
+                foreach (var slot in this.slots)
+                {
+                    if (slot != null)
+                    {
+                        foreach (var element in slot)
+                        {
+                            values.Add(element.Value);
+                        }
+                    }
+                }
+
+                return values;
             }
         }
 
