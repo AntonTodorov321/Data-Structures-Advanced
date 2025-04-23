@@ -68,7 +68,7 @@
         {
             return this.allTasks.Values
                 .OrderByDescending(task => task.EstimatedExecutionTime)
-                .ThenBy(task => task.Name);
+                .ThenBy(task => task.Name.Length);
         }
 
         public IEnumerable<Task> GetDomainTasks(string domain)
