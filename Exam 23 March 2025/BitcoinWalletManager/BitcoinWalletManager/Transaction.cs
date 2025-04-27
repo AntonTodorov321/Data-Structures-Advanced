@@ -1,6 +1,8 @@
 ﻿namespace BitcoinWalletManager
 {
-    public class Transaction
+    using System;
+
+    public class Transaction : IComparable<Transaction>
     {
         public string Hash { get; set; }
 
@@ -11,5 +13,10 @@
         public int Value { get; set; }
 
         public int Nonce { get; set; }
+
+        public int CompareTo(Transaction other)
+        {
+            return this.Nonce.CompareTo(other.Nonce);
+        }
     }
 }
