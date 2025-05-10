@@ -21,5 +21,7 @@ namespace _01.DogVet
         public int Age { get; set; }
 
         public int Vaccines { get; set; }
+
+        public string OwnerName { get; set; }
     }
 }
