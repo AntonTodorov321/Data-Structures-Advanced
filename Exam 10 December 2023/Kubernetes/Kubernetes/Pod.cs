@@ -1,5 +1,6 @@
 namespace Kubernetes
 {
+
     public class Pod
     {
         public string Id { get; set; }

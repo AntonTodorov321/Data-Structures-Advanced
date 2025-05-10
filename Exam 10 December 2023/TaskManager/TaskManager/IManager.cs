@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 namespace TaskManager
 {
+    using System.Collections.Generic;
+
     public interface IManager
     {
         void AddTask(Task task);

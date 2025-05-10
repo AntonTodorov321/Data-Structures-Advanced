@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 namespace Kubernetes
 {
+    using System.Collections.Generic;
+
     public interface IController
     {
         void Deploy(Pod pod);
