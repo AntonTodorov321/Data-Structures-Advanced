@@ -19,5 +19,7 @@ namespace _02.FitGym
         public DateTime RegistrationDate { get; set; }
 
         public int Visits { get; set; }
+
+        public Trainer Trainer { get; set; }
     }
 }
